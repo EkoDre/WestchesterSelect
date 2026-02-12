@@ -231,14 +231,29 @@ Visit us online: https://westchesterselect.com
       message: error.message,
       stack: error.stack,
       response: error.response?.data || error.response,
-      status: error.response?.status,
+      status: error.statusCode || error.response?.status,
       statusText: error.response?.statusText,
+      body: error.body,
     });
     
     // Check for specific MailerSend errors
     let errorMessage = 'Failed to send inquiry. Please try again later or contact us directly.';
     
-    if (error.response?.data) {
+    // Handle MailerSend API errors (they use a different structure)
+    if (error.body) {
+      const mailerError = error.body;
+      console.error('MailerSend error body:', mailerError);
+      
+      if (mailerError.message) {
+        // Check for domain verification error
+        if (mailerError.message.includes('domain must be verified')) {
+          errorMessage = 'Email service configuration error. Please contact support.';
+          console.error('DOMAIN VERIFICATION REQUIRED: The sender email domain must be verified in MailerSend');
+        } else {
+          errorMessage = `Email service error: ${mailerError.message}`;
+        }
+      }
+    } else if (error.response?.data) {
       const mailerError = error.response.data;
       console.error('MailerSend error details:', mailerError);
       
@@ -250,9 +265,9 @@ Visit us online: https://westchesterselect.com
     }
     
     // Return error response
-    return res.status(500).json({ 
+    return res.status(error.statusCode || 500).json({ 
       error: errorMessage,
-      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+      details: process.env.NODE_ENV === 'development' ? (error.body?.message || error.message) : undefined
     });
   }
 }
