@@ -1,0 +1,3 @@
+# This file ensures Netlify only processes files in my-react-app
+# and ignores the parent directory's node_modules
+
