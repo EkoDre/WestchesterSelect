@@ -648,6 +648,11 @@ function App() {
                 Terms & Conditions
               </a>
             </div>
+            <div className="mt-8 pt-8 border-t border-gray-800 flex items-center justify-center gap-2 text-gray-500 text-sm">
+              <span>Powered by</span>
+              <img src="/logo-mark.png" alt="EkoMade Labs" className="h-6 w-auto" />
+              <span className="text-gray-400">EkoMade Labs</span>
+            </div>
           </div>
         </div>
       </footer>
