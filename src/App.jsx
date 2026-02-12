@@ -629,18 +629,18 @@ function App() {
             <p className="text-sm md:text-base font-light mb-4 text-center">
               © 2025 Westchester Select Realty — All Rights Reserved | Licensed Real Estate Brokerage | Equal Housing Opportunity
             </p>
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-gray-400 text-sm">
+            <div className="flex flex-col sm:flex-row items-center gap-4 text-gray-400 text-sm relative">
               <a
                 href="https://ekomadevpn.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+                className="flex items-center gap-2 hover:opacity-80 transition-opacity sm:absolute sm:left-0"
               >
                 <span className="text-gray-500">Powered by</span>
                 <img src="/logo-mark.png" alt="EkoMade Labs" className="h-6 w-auto" />
                 <span className="text-gray-400">EkoMade Labs</span>
               </a>
-              <div>
+              <div className="text-center flex-1">
                 <a
                   href="/privacy-policy.pdf"
                   target="_blank"
