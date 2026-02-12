@@ -201,15 +201,23 @@ Visit us online: https://westchesterselect.com
 
     // Send both emails
     console.log('Attempting to send emails...');
-    const [adminResponse, confirmationResponse] = await Promise.all([
-      mailersend.email.send(adminEmailParams),
-      mailersend.email.send(confirmationEmailParams),
-    ]);
+    let adminResponse, confirmationResponse;
     
-    console.log('Emails sent successfully:', {
-      admin: adminResponse.statusCode,
-      confirmation: confirmationResponse.statusCode,
-    });
+    try {
+      [adminResponse, confirmationResponse] = await Promise.all([
+        mailersend.email.send(adminEmailParams),
+        mailersend.email.send(confirmationEmailParams),
+      ]);
+      
+      console.log('Emails sent successfully:', {
+        admin: adminResponse?.statusCode || adminResponse?.status,
+        confirmation: confirmationResponse?.statusCode || confirmationResponse?.status,
+      });
+    } catch (emailError) {
+      console.error('MailerSend API error:', emailError);
+      console.error('Error response:', emailError.response?.data || emailError.response);
+      throw emailError;
+    }
 
     // Return success response
     return res.status(200).json({ 
@@ -223,15 +231,28 @@ Visit us online: https://westchesterselect.com
       message: error.message,
       stack: error.stack,
       response: error.response?.data || error.response,
+      status: error.response?.status,
+      statusText: error.response?.statusText,
     });
     
-    // Return more detailed error in development, user-friendly in production
-    const errorMessage = process.env.NODE_ENV === 'development' 
-      ? `Error: ${error.message || 'Unknown error'}`
-      : 'Failed to send inquiry. Please try again later or contact us directly.';
+    // Check for specific MailerSend errors
+    let errorMessage = 'Failed to send inquiry. Please try again later or contact us directly.';
     
+    if (error.response?.data) {
+      const mailerError = error.response.data;
+      console.error('MailerSend error details:', mailerError);
+      
+      if (mailerError.message) {
+        errorMessage = `Email service error: ${mailerError.message}`;
+      }
+    } else if (error.message) {
+      errorMessage = `Error: ${error.message}`;
+    }
+    
+    // Return error response
     return res.status(500).json({ 
-      error: errorMessage 
+      error: errorMessage,
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 }
