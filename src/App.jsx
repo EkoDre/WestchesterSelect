@@ -630,16 +630,6 @@ function App() {
               © 2025 Westchester Select Realty — All Rights Reserved | Licensed Real Estate Brokerage | Equal Housing Opportunity
             </p>
             <div className="flex flex-col sm:flex-row items-center gap-4 text-gray-400 text-sm relative">
-              <a
-                href="https://ekomadevpn.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 hover:opacity-80 transition-opacity sm:absolute sm:left-0"
-              >
-                <span className="text-gray-500">Powered by</span>
-                <img src="/logo-mark.png" alt="EkoMade Labs" className="h-6 w-auto" />
-                <span className="text-gray-400">EkoMade Labs</span>
-              </a>
               <div className="text-center flex-1">
                 <a
                   href="/privacy-policy.pdf"
@@ -659,6 +649,16 @@ function App() {
                   Terms & Conditions
                 </a>
               </div>
+              <a
+                href="https://ekomadevpn.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 hover:opacity-80 transition-opacity sm:absolute sm:right-0"
+              >
+                <span className="text-gray-500">Powered by</span>
+                <img src="/logo-mark.png" alt="EkoMade Labs" className="h-6 w-auto" />
+                <span className="text-gray-400">EkoMade Labs</span>
+              </a>
             </div>
           </div>
         </div>
