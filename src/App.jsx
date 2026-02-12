@@ -7,6 +7,18 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const sectionsRef = useRef({})
   const navigate = useNavigate()
+  
+  // Contact form state
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    interest: '',
+    message: ''
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState(null) // 'success' or 'error'
+  const [submitMessage, setSubmitMessage] = useState('')
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -33,6 +45,68 @@ function App() {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' })
       setIsMenuOpen(false)
+    }
+  }
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+    // Clear status message when user starts typing
+    if (submitStatus) {
+      setSubmitStatus(null)
+      setSubmitMessage('')
+    }
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    
+    // Validate required fields
+    if (!formData.name || !formData.email || !formData.message) {
+      setSubmitStatus('error')
+      setSubmitMessage('Please fill in all required fields (Name, Email, and Message).')
+      return
+    }
+
+    setIsSubmitting(true)
+    setSubmitStatus(null)
+    setSubmitMessage('')
+
+    try {
+      const response = await fetch('/api/send-inquiry', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        setSubmitStatus('success')
+        setSubmitMessage(data.message || 'Your inquiry has been sent successfully!')
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          interest: '',
+          message: ''
+        })
+      } else {
+        setSubmitStatus('error')
+        setSubmitMessage(data.error || 'Failed to send inquiry. Please try again.')
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error)
+      setSubmitStatus('error')
+      setSubmitMessage('Failed to send inquiry. Please try again later.')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -558,22 +632,59 @@ function App() {
                 <span className="text-3xl">✉️</span>
                 <span>Send Us a Message</span>
               </h3>
-              <form className="space-y-5">
+              <form className="space-y-5" onSubmit={handleSubmit}>
+                {submitStatus && (
+                  <div className={`p-4 rounded-xl ${
+                    submitStatus === 'success' 
+                      ? 'bg-green-500/20 border border-green-500/50 text-green-300' 
+                      : 'bg-red-500/20 border border-red-500/50 text-red-300'
+                  }`}>
+                    {submitMessage}
+                  </div>
+                )}
                 <div className="relative">
                   <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg">👤</div>
-                  <input type="text" placeholder="Your Name" className="w-full pl-12 pr-4 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-gold focus:bg-white/15 transition-all duration-300" />
+                  <input 
+                    type="text" 
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    placeholder="Your Name" 
+                    required
+                    className="w-full pl-12 pr-4 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-gold focus:bg-white/15 transition-all duration-300" 
+                  />
                 </div>
                 <div className="relative">
                   <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg">📧</div>
-                  <input type="email" placeholder="Your Email" className="w-full pl-12 pr-4 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-gold focus:bg-white/15 transition-all duration-300" />
+                  <input 
+                    type="email" 
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="Your Email" 
+                    required
+                    className="w-full pl-12 pr-4 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-gold focus:bg-white/15 transition-all duration-300" 
+                  />
                 </div>
                 <div className="relative">
                   <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg">📞</div>
-                  <input type="tel" placeholder="Phone Number" className="w-full pl-12 pr-4 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-gold focus:bg-white/15 transition-all duration-300" />
+                  <input 
+                    type="tel" 
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    placeholder="Phone Number" 
+                    className="w-full pl-12 pr-4 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-gold focus:bg-white/15 transition-all duration-300" 
+                  />
                 </div>
                 <div className="relative">
                   <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg z-10">🎯</div>
-                  <select className="w-full pl-12 pr-4 py-4 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none focus:border-gold focus:bg-white/15 transition-all duration-300 appearance-none cursor-pointer">
+                  <select 
+                    name="interest"
+                    value={formData.interest}
+                    onChange={handleInputChange}
+                    className="w-full pl-12 pr-4 py-4 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none focus:border-gold focus:bg-white/15 transition-all duration-300 appearance-none cursor-pointer"
+                  >
                     <option value="" className="bg-gray-800">I'm interested in...</option>
                     <option value="buying" className="bg-gray-800">Buying a Home</option>
                     <option value="selling" className="bg-gray-800">Selling a Home</option>
@@ -584,13 +695,24 @@ function App() {
                 </div>
                 <div className="relative">
                   <div className="absolute left-4 top-6 text-gray-400 text-lg">💬</div>
-                  <textarea rows="4" placeholder="Your Message" className="w-full pl-12 pr-4 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-gold focus:bg-white/15 transition-all duration-300 resize-none"></textarea>
+                  <textarea 
+                    rows="4" 
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    placeholder="Your Message" 
+                    required
+                    className="w-full pl-12 pr-4 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-gold focus:bg-white/15 transition-all duration-300 resize-none"
+                  ></textarea>
                 </div>
                 <button
                   type="submit"
-                  className="w-full bg-gold hover:bg-gold/90 active:bg-gold/90 text-white px-8 py-4 rounded-xl text-lg font-semibold shadow-2xl hover:shadow-gold/50 active:shadow-gold/50 transition-all duration-300 transform hover:scale-105 active:scale-97 mt-6"
+                  disabled={isSubmitting}
+                  className={`w-full bg-gold hover:bg-gold/90 active:bg-gold/90 text-white px-8 py-4 rounded-xl text-lg font-semibold shadow-2xl hover:shadow-gold/50 active:shadow-gold/50 transition-all duration-300 transform hover:scale-105 active:scale-97 mt-6 ${
+                    isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
                 >
-                  Send Message →
+                  {isSubmitting ? 'Sending...' : 'Send Message →'}
                 </button>
               </form>
             </div>
