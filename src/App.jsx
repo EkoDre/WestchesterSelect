@@ -625,33 +625,40 @@ function App() {
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-800 pt-8 text-center">
-            <p className="text-sm md:text-base font-light mb-4">
+          <div className="border-t border-gray-800 pt-8">
+            <p className="text-sm md:text-base font-light mb-4 text-center">
               © 2025 Westchester Select Realty — All Rights Reserved | Licensed Real Estate Brokerage | Equal Housing Opportunity
             </p>
-            <div className="text-gray-400 text-sm">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-gray-400 text-sm">
               <a
-                href="/privacy-policy.pdf"
+                href="https://ekomadevpn.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-white hover:underline transition-colors"
+                className="flex items-center gap-2 hover:opacity-80 transition-opacity"
               >
-                Privacy Policy
+                <span className="text-gray-500">Powered by</span>
+                <img src="/logo-mark.png" alt="EkoMade Labs" className="h-6 w-auto" />
+                <span className="text-gray-400">EkoMade Labs</span>
               </a>
-              <span className="mx-2">|</span>
-              <a
-                href="/terms-and-conditions.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-white hover:underline transition-colors"
-              >
-                Terms & Conditions
-              </a>
-            </div>
-            <div className="mt-8 pt-8 border-t border-gray-800 flex items-center justify-center gap-2 text-gray-500 text-sm">
-              <span>Powered by</span>
-              <img src="/logo-mark.png" alt="EkoMade Labs" className="h-6 w-auto" />
-              <span className="text-gray-400">EkoMade Labs</span>
+              <div>
+                <a
+                  href="/privacy-policy.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white hover:underline transition-colors"
+                >
+                  Privacy Policy
+                </a>
+                <span className="mx-2">|</span>
+                <a
+                  href="/terms-and-conditions.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white hover:underline transition-colors"
+                >
+                  Terms & Conditions
+                </a>
+              </div>
             </div>
           </div>
         </div>
