@@ -1,6 +1,30 @@
 import { MailerSend, EmailParams, Sender, Recipient } from 'mailersend';
 
+// Helper function to escape HTML
+function escapeHtml(text) {
+  if (!text) return '';
+  const map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+  return text.replace(/[&<>"']/g, m => map[m]);
+}
+
 export default async function handler(req, res) {
+  // Set CORS headers
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -16,6 +40,13 @@ export default async function handler(req, res) {
       });
     }
 
+    // Escape user input for HTML
+    const safeName = escapeHtml(name);
+    const safeEmail = escapeHtml(email);
+    const safePhone = phone ? escapeHtml(phone) : '';
+    const safeInterest = interest ? escapeHtml(interest) : '';
+    const safeMessage = escapeHtml(message);
+
     // Validate API key
     const apiKey = process.env.MAILERSEND_API_KEY;
     if (!apiKey) {
@@ -27,6 +58,8 @@ export default async function handler(req, res) {
     const mailersend = new MailerSend({
       apiKey: apiKey,
     });
+
+    console.log('MailerSend initialized, API key present:', !!apiKey);
 
     const sender = new Sender('admin@westchesterselect.com', 'Westchester Select Realty');
 
@@ -61,27 +94,27 @@ export default async function handler(req, res) {
             <div class="content">
               <div class="field">
                 <span class="label">Name:</span>
-                <div class="value">${name}</div>
+                <div class="value">${safeName}</div>
               </div>
               <div class="field">
                 <span class="label">Email:</span>
-                <div class="value">${email}</div>
+                <div class="value">${safeEmail}</div>
               </div>
-              ${phone ? `
+              ${safePhone ? `
               <div class="field">
                 <span class="label">Phone:</span>
-                <div class="value">${phone}</div>
+                <div class="value">${safePhone}</div>
               </div>
               ` : ''}
-              ${interest ? `
+              ${safeInterest ? `
               <div class="field">
                 <span class="label">Interest:</span>
-                <div class="value">${interest}</div>
+                <div class="value">${safeInterest}</div>
               </div>
               ` : ''}
               <div class="field">
                 <span class="label">Message:</span>
-                <div class="message-box">${message}</div>
+                <div class="message-box">${safeMessage}</div>
               </div>
             </div>
           </div>
@@ -91,13 +124,13 @@ export default async function handler(req, res) {
       .setText(`
 New Inquiry – Westchester Select Realty
 
-Name: ${name}
-Email: ${email}
-${phone ? `Phone: ${phone}` : ''}
-${interest ? `Interest: ${interest}` : ''}
+Name: ${safeName}
+Email: ${safeEmail}
+${safePhone ? `Phone: ${safePhone}` : ''}
+${safeInterest ? `Interest: ${safeInterest}` : ''}
 
 Message:
-${message}
+${safeMessage}
       `);
 
     // 2. Send confirmation email to user
@@ -131,7 +164,7 @@ ${message}
               <h1>Thank You for Contacting Westchester Select Realty</h1>
             </div>
             <div class="content">
-              <p>Dear ${name},</p>
+              <p>Dear ${safeName},</p>
               <p>Thank you for reaching out to Westchester Select Realty. We have successfully received your inquiry and appreciate your interest in our services.</p>
               <p>A member of our team will review your message and contact you shortly to assist you with your real estate needs.</p>
               <div class="divider"></div>
@@ -167,10 +200,16 @@ Visit us online: https://westchesterselect.com
       `);
 
     // Send both emails
+    console.log('Attempting to send emails...');
     const [adminResponse, confirmationResponse] = await Promise.all([
       mailersend.email.send(adminEmailParams),
       mailersend.email.send(confirmationEmailParams),
     ]);
+    
+    console.log('Emails sent successfully:', {
+      admin: adminResponse.statusCode,
+      confirmation: confirmationResponse.statusCode,
+    });
 
     // Return success response
     return res.status(200).json({ 
@@ -180,10 +219,19 @@ Visit us online: https://westchesterselect.com
 
   } catch (error) {
     console.error('Error sending email:', error);
+    console.error('Error details:', {
+      message: error.message,
+      stack: error.stack,
+      response: error.response?.data || error.response,
+    });
     
-    // Return user-friendly error message
+    // Return more detailed error in development, user-friendly in production
+    const errorMessage = process.env.NODE_ENV === 'development' 
+      ? `Error: ${error.message || 'Unknown error'}`
+      : 'Failed to send inquiry. Please try again later or contact us directly.';
+    
     return res.status(500).json({ 
-      error: 'Failed to send inquiry. Please try again later or contact us directly.' 
+      error: errorMessage 
     });
   }
 }
