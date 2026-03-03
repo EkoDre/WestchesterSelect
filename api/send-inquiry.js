@@ -32,7 +32,7 @@ export default async function handler(req, res) {
 
   try {
     // Validate required fields
-    const { name, email, phone, interest, message } = req.body;
+    const { name, email, phone, interest, message, agentName, agentEmail } = req.body;
 
     if (!name || !email || !message) {
       return res.status(400).json({ 
@@ -46,6 +46,7 @@ export default async function handler(req, res) {
     const safePhone = phone ? escapeHtml(phone) : '';
     const safeInterest = interest ? escapeHtml(interest) : '';
     const safeMessage = escapeHtml(message);
+    const safeAgentName = agentName ? escapeHtml(agentName) : '';
 
     // Validate API key
     const apiKey = process.env.MAILERSEND_API_KEY;
@@ -63,13 +64,21 @@ export default async function handler(req, res) {
 
     const sender = new Sender('admin@westchesterselect.com', 'Westchester Select Realty');
 
-    // 1. Send email to admin
-    const adminRecipient = new Recipient('admin@westchesterselect.com', 'Westchester Select Realty');
-    
+    // Determine recipient(s) — if an agent is specified, send to them + admin; otherwise just admin
+    const recipients = [new Recipient('admin@westchesterselect.com', 'Westchester Select Realty')];
+    if (agentEmail) {
+      recipients.push(new Recipient(agentEmail, agentName || 'Agent'));
+    }
+
+    const subjectLine = safeAgentName
+      ? `New Inquiry for ${safeAgentName} – Westchester Select Realty`
+      : 'New Inquiry – Westchester Select Realty';
+
+    // 1. Send email to admin (and agent if specified)
     const adminEmailParams = new EmailParams()
       .setFrom(sender)
-      .setTo([adminRecipient])
-      .setSubject('New Inquiry – Westchester Select Realty')
+      .setTo(recipients)
+      .setSubject(subjectLine)
       .setHtml(`
         <!DOCTYPE html>
         <html>
@@ -89,9 +98,15 @@ export default async function handler(req, res) {
         <body>
           <div class="container">
             <div class="header">
-              <h1>New Inquiry Received</h1>
+              <h1>${safeAgentName ? `New Inquiry for ${safeAgentName}` : 'New Inquiry Received'}</h1>
             </div>
             <div class="content">
+              ${safeAgentName ? `
+              <div class="field">
+                <span class="label">Sent to Agent:</span>
+                <div class="value">${safeAgentName}</div>
+              </div>
+              ` : ''}
               <div class="field">
                 <span class="label">Name:</span>
                 <div class="value">${safeName}</div>
@@ -122,9 +137,9 @@ export default async function handler(req, res) {
         </html>
       `)
       .setText(`
-New Inquiry – Westchester Select Realty
+${safeAgentName ? `New Inquiry for ${safeAgentName}` : 'New Inquiry'} – Westchester Select Realty
 
-Name: ${safeName}
+${safeAgentName ? `Sent to Agent: ${safeAgentName}\n` : ''}Name: ${safeName}
 Email: ${safeEmail}
 ${safePhone ? `Phone: ${safePhone}` : ''}
 ${safeInterest ? `Interest: ${safeInterest}` : ''}

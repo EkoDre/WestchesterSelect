@@ -2,6 +2,10 @@ import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import logo from '../assets/logo.png'
 import Chatbot from '../components/Chatbot'
+import AgentContactForm from '../components/AgentContactForm'
+
+const AGENT_NAME = 'Michael Muller'
+const AGENT_EMAIL = 'michaelmuller@westchesterselect.com'
 
 function MichaelMuller() {
   const navigate = useNavigate()
@@ -9,6 +13,10 @@ function MichaelMuller() {
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
+
+  const scrollToContact = () => {
+    document.getElementById('agent-contact')?.scrollIntoView({ behavior: 'smooth' })
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -54,10 +62,10 @@ function MichaelMuller() {
                 <span>📞</span>
                 <span>(914) 222-0384</span>
               </a>
-              <a href="mailto:michaelmuller@westchsterselect.com" className="bg-gold hover:bg-gold/90 text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
+              <button onClick={scrollToContact} className="bg-gold hover:bg-gold/90 text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
                 <span>✉️</span>
                 <span>Email Me</span>
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -112,27 +120,22 @@ function MichaelMuller() {
         </div>
       </section>
 
-      {/* Contact CTA Section */}
-      <section className="py-20 px-4 bg-gradient-to-br from-charcoal via-charcoal to-gray-800 text-white">
+      {/* Contact Section */}
+      <section id="agent-contact" className="py-20 px-4 bg-gradient-to-br from-charcoal via-charcoal to-gray-800">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">Ready to Work Together?</h2>
-          <p className="text-xl md:text-2xl leading-relaxed mb-8 font-light">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 text-white">Ready to Work Together?</h2>
+          <p className="text-xl md:text-2xl leading-relaxed mb-8 font-light text-gray-300">
             Let's discuss your real estate goals and how I can help you achieve them.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-4">
             <a 
               href="tel:9142220384"
               className="bg-gold hover:bg-gold/90 text-white px-8 py-4 rounded-full text-lg font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
             >
               Call (914) 222-0384
             </a>
-            <a 
-              href="mailto:michaelmuller@westchsterselect.com"
-              className="border-2 border-white text-white hover:bg-white hover:text-charcoal px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform hover:scale-105"
-            >
-              Send Email
-            </a>
           </div>
+          <AgentContactForm agentName={AGENT_NAME} agentEmail={AGENT_EMAIL} />
         </div>
       </section>
 
@@ -150,4 +153,3 @@ function MichaelMuller() {
 }
 
 export default MichaelMuller
-
