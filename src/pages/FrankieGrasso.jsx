@@ -56,7 +56,7 @@ function FrankieGrasso() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent pointer-events-none"></div>
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-charcoal mb-4">Frankie Grasso</h1>
-            <div className="text-2xl text-gold font-semibold mb-6">Agent</div>
+            <div className="text-2xl text-gold font-semibold mb-6">Licensed Real Estate Salesperson</div>
             <div className="flex flex-col sm:flex-row justify-center gap-4 text-lg">
               <a href="tel:9142223553" className="bg-gold hover:bg-gold/90 text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
                 <span>📞</span>

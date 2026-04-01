@@ -232,9 +232,9 @@ function App() {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto justify-items-center">
             {[
-              { 
-                name: 'Danny Pistolesi', 
-                title: 'Agent', 
+              {
+                name: 'Danny Pistolesi',
+                title: 'Licensed Real Estate Salesperson',
                 phone: '(914) 222-0846',
                 email: 'dannypistolesi@westchesterselect.com',
                 experience: 'Expert Local Knowledge', 
@@ -242,9 +242,9 @@ function App() {
                 transactions: 'Trusted Westchester Specialist',
                 image: '/danny-pistolesi..JPG'
               },
-              { 
-                name: 'Frank Grasso', 
-                title: 'Agent', 
+              {
+                name: 'Frank Grasso',
+                title: 'Licensed Real Estate Salesperson',
                 phone: '(914) 222-3553',
                 email: 'frankgrasso@westchesterselect.com',
                 experience: 'Expert Local Knowledge', 
@@ -252,9 +252,9 @@ function App() {
                 transactions: 'Trusted Westchester Specialist',
                 image: '/frank-grasso.jpg'
               },
-              { 
-                name: 'Michael Muller', 
-                title: 'Agent', 
+              {
+                name: 'Michael Muller',
+                title: 'Licensed Real Estate Salesperson',
                 phone: '(914) 222-0384',
                 email: 'michaelmuller@westchesterselect.com',
                 experience: 'Expert Local Knowledge', 
@@ -262,9 +262,9 @@ function App() {
                 transactions: 'Trusted Westchester Specialist',
                 image: '/michael-muller.jpeg'
               },
-              { 
-                name: 'Lynne Grasso', 
-                title: 'Agent', 
+              {
+                name: 'Lynne Grasso',
+                title: 'Associate Real Estate Broker',
                 phone: '(914) 774-6640',
                 email: 'lynnegrasso@westchesterselect.com',
                 experience: '30+ Years Experience', 
@@ -272,9 +272,9 @@ function App() {
                 transactions: 'New Rochelle\'s #1 Producer 2011',
                 image: '/lynne.jpg'
               },
-              { 
-                name: 'Louis Grasso', 
-                title: 'Agent', 
+              {
+                name: 'Louis Grasso',
+                title: 'Licensed Real Estate Salesperson',
                 phone: '(914) 438-1418',
                 email: 'louisgrasso@westchesterselect.com',
                 experience: 'Years of Hands-On Experience', 
@@ -769,6 +769,24 @@ function App() {
                   className="hover:text-white hover:underline transition-colors"
                 >
                   Terms & Conditions
+                </a>
+                <span className="mx-2">|</span>
+                <a
+                  href="/nys-fair-housing-notice.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white hover:underline transition-colors"
+                >
+                  Fair Housing Notice
+                </a>
+                <span className="mx-2">|</span>
+                <a
+                  href="/westchester-select-sop.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white hover:underline transition-colors"
+                >
+                  Standard Operating Procedures
                 </a>
               </div>
               <a
