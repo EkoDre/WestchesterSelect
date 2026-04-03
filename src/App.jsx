@@ -458,31 +458,6 @@ function App() {
         </div>
       </section>
 
-      {/* Why Choose Us Section */}
-      <section className="py-20 md:py-32 px-4 bg-gradient-to-b from-gray-50 to-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="fade-in mb-16 text-center">
-            <span className="inline-block px-4 py-2 bg-gold/10 text-gold text-sm font-semibold rounded-full mb-4">WHY CHOOSE US</span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-charcoal mb-6 tracking-tight">Why Westchester Select Realty</h2>
-            <div className="w-32 h-1 bg-gradient-to-r from-gold to-gold/50 mx-auto"></div>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              { icon: '🏆', title: 'Award-Winning', desc: 'Recognized excellence in real estate service' },
-              { icon: '📊', title: 'Market Leaders', desc: 'Top 1% of agents in Westchester County' },
-              { icon: '🤝', title: '500+ Transactions', desc: 'Successfully closed deals since 2018' },
-              { icon: '⭐', title: '5-Star Rated', desc: 'Consistently rated by satisfied clients' },
-            ].map((item, index) => (
-              <div key={index} className="fade-in text-center p-6">
-                <div className="text-5xl mb-4">{item.icon}</div>
-                <h3 className="text-xl font-bold text-charcoal mb-2">{item.title}</h3>
-                <p className="text-gray-600">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Market Statistics Section */}
       <section className="py-20 md:py-32 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
@@ -491,7 +466,7 @@ function App() {
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-charcoal mb-6 tracking-tight">Westchester Market Statistics</h2>
             <div className="w-32 h-1 bg-gradient-to-r from-gold to-gold/50 mx-auto mb-8"></div>
             <p className="text-xl md:text-2xl text-charcoal max-w-3xl mx-auto font-light">
-              Real-time data to help you make informed decisions
+              Data to help you make informed decisions
             </p>
           </div>
           <div className="grid md:grid-cols-4 gap-6">
@@ -505,37 +480,6 @@ function App() {
                 <div className="text-4xl font-bold text-gold mb-2">{stat.value}</div>
                 <div className="text-charcoal font-semibold mb-2">{stat.label}</div>
                 <div className="text-sm text-green-600 font-medium">{stat.change} vs last year</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="py-20 md:py-32 px-4 bg-gradient-to-b from-white to-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <div className="fade-in mb-16 text-center">
-            <span className="inline-block px-4 py-2 bg-gold/10 text-gold text-sm font-semibold rounded-full mb-4">CLIENT TESTIMONIALS</span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-charcoal mb-6 tracking-tight">What Our Clients Say</h2>
-            <div className="w-32 h-1 bg-gradient-to-r from-gold to-gold/50 mx-auto"></div>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { name: 'Sarah & Michael Chen', location: 'Scarsdale', text: 'Westchester Select Realty made our home buying experience seamless. Their expertise in the Scarsdale market helped us find our dream home in just 3 weeks.', rating: 5 },
-              { name: 'Robert Martinez', location: 'Rye', text: 'Outstanding service from start to finish. They sold our waterfront property above asking price and handled every detail with professionalism.', rating: 5 },
-              { name: 'Jennifer Williams', location: 'Larchmont', text: 'As a first-time buyer, I was nervous about the process. The team at Westchester Select Realty guided me through every step with patience and expertise.', rating: 5 },
-            ].map((testimonial, index) => (
-              <div key={index} className="fade-in touch-active bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl active:shadow-2xl transition-all duration-300 border border-gray-100">
-                <div className="flex mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <span key={i} className="text-gold text-xl">⭐</span>
-                  ))}
-                </div>
-                <p className="text-charcoal mb-6 italic">"{testimonial.text}"</p>
-                <div>
-                  <div className="font-bold text-charcoal">{testimonial.name}</div>
-                  <div className="text-sm text-gray-600">{testimonial.location}</div>
-                </div>
               </div>
             ))}
           </div>
@@ -725,8 +669,9 @@ function App() {
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-3 gap-8 mb-8">
             <div>
-              <h4 className="text-charcoal font-bold mb-4">Westchester Select Realty</h4>
-              <p className="text-sm mb-4">Premier real estate services in Westchester County. Your trusted partner for buying, selling, and investing.</p>
+              <h4 className="text-charcoal font-bold mb-4">Westchester Select Realty LLC</h4>
+              <p className="text-sm mb-1">Licensed Real Estate Broker</p>
+              <p className="text-sm mb-4">Broker: Louis Grasso Jr.</p>
             </div>
             <div>
               <h4 className="text-charcoal font-bold mb-4">Quick Links</h4>
@@ -749,7 +694,7 @@ function App() {
           </div>
           <div className="border-t border-gray-800 pt-8">
             <p className="text-sm md:text-base font-light mb-4 text-center">
-              © 2025 Westchester Select Realty — All Rights Reserved | Licensed Real Estate Brokerage | Equal Housing Opportunity
+              © 2026 Westchester Select Realty LLC — All Rights Reserved | Licensed Real Estate Brokerage | Equal Housing Opportunity
             </p>
             <div className="flex flex-col sm:flex-row items-center gap-4 text-gray-400 text-sm relative">
               <div className="text-center flex-1">
